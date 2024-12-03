@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,6 @@ import com.lp.users.models.dto.UserGet;
 import com.lp.users.models.dto.UserUpdate;
 import com.lp.users.services.UserService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/u")
@@ -45,6 +45,10 @@ public class UserController {
 
     @PostMapping("/")
     public ResponseEntity<String> create(@RequestBody UserCreate user){
+        System.out.println(user);
+        System.out.println(user.getName());
+        System.out.println(user.getEmail());
+        System.out.println(user.getPassword());
         try{
             return ResponseEntity.created(null).body(userService.create(user).toString());
         }catch(Exception e){
