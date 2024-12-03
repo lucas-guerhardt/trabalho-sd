@@ -1,0 +1,113 @@
+package com.lp.clinic.models.enums;
+
+public enum Symptoms {
+    // General Symptoms
+    LOSS_APPETITE,
+    LETHARGY,
+    WEAKNESS,
+    WEIGHT_LOSS,
+    WEIGHT_GAIN,
+    EXCESSIVE_THIRST,
+    EXCESSIVE_URINATION,
+    FEVER,
+    BEHAVIOR_CHANGES,
+    UNUSUAL_ODOR,
+    SHAKING,
+    TREMORS,
+    SEIZURES,
+    COLLAPSE,
+
+    // Skin and Coat Symptoms
+    HAIR_LOSS,
+    ITCHING,
+    SCRATCHING,
+    SKIN_REDNESS,
+    SKIN_SWELLING,
+    SKIN_SORES,
+    LUMPS,
+    BUMPS,
+    GROWTHS,
+    DULL_COAT,
+    DRY_COAT,
+    GREASY_COAT,
+    FLAKY_SKIN,
+    SCALY_SKIN,
+
+    // Eye Symptoms
+    EYE_DISCHARGE,
+    CLOUDY_EYES,
+    RED_EYES,
+    EYE_SWELLING,
+    LIGHT_SENSITIVITY,
+    FREQUENT_BLINKING,
+    EYE_RUBBING,
+
+    // Ear Symptoms
+    HEAD_SHAKING,
+    HEAD_TILTING,
+    EAR_DISCHARGE,
+    EAR_ODOR,
+    EAR_SCRATCHING,
+    EAR_REDNESS,
+    EAR_SWELLING,
+
+    // Mouth and Nose Symptoms
+    EXCESSIVE_DROOLING,
+    BAD_BREATH,
+    BLEEDING_GUMS,
+    MOUTH_SORES,
+    DIFFICULTY_CHEWING,
+    DIFFICULTY_SWALLOWING,
+    NASAL_DISCHARGE,
+    FREQUENT_SNEEZING,
+
+    // Respiratory Symptoms
+    COUGHING,
+    WHEEZING,
+    LABORED_BREATHING,
+    SHORTNESS_BREATH,
+    OPEN_MOUTH_BREATHING,
+    NOISY_BREATHING,
+
+    // Gastrointestinal Symptoms
+    VOMITING,
+    DIARRHEA,
+    CONSTIPATION,
+    BLOOD_STOOL,
+    BLOOD_VOMIT,
+    ABDOMINAL_SWELLING,
+    ABDOMINAL_PAIN,
+    EXCESSIVE_GAS,
+    BLOATING,
+
+    // Musculoskeletal Symptoms
+    LIMPING,
+    DIFFICULTY_WALKING,
+    STIFFNESS,
+    RELUCTANCE_TO_MOVE,
+    JOINT_SWELLING,
+
+    // Neurological Symptoms
+    HEAD_PRESSING,
+    LOSS_BALANCE,
+    LOSS_COORDINATION,
+    WALKING_IN_CIRCLES,
+    TWITCHING,
+    ABNORMAL_EYE_MOVEMENTS,
+    PARALYSIS,
+    LIMB_WEAKNESS,
+
+    // Reproductive and Urinary Symptoms
+    DIFFICULTY_URINATING,
+    DIFFICULTY_DEFECATING,
+    BLOOD_URINE,
+    EXCESSIVE_GENITAL_LICKING,
+    GENITAL_SWELLING,
+    GENITAL_DISCHARGE,
+    HEAT_CYCLE_CHANGES,
+
+    // Behavioral Symptoms
+    SUDDEN_AGGRESSION,
+    EXCESSIVE_FEAR,
+    EXCESSIVE_VOCALIZATION
+}
