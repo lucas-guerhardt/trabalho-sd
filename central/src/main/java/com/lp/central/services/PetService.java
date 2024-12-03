@@ -2,15 +2,26 @@ package com.lp.central.services;
 
 import java.util.List;
 
-import com.lp.central.models.PetModel;
+import com.lp.central.models.dto.pet.PetCreate;
+import com.lp.central.models.dto.pet.PetGet;
+import com.lp.central.models.dto.pet.PetUpdate;
 
 public interface PetService {
-    PetModel createPet(PetModel pet, List
-    <String> guardianCpfs);
-    List<PetModel> getAllPets();
-    PetModel getPetById(Long id);
-    PetModel updatePet(Long id, PetModel updatedPet);
-    PetModel addGuardians(Long id, List<String> guardianCpfs);
-    PetModel removeGuardians(Long id, List<String> guardianCpfs);
+    List<PetGet> get();
+
+    PetGet get(Long id);
+
+    List<String> getGuardiansCpfsOf(Long petId);
+
+    PetGet getByGuardianCpf(String cpf);
+
+    String createPet(PetCreate pet, List<String> guardianCpfs);
+
+    String updatePet(Long id, PetUpdate updatedPet);
+
+    String addGuardians(Long id, List<String> guardianCpfs);
+
+    String removeGuardians(Long id, List<String> guardianCpfs);
+
     void deletePet(Long id);
 }

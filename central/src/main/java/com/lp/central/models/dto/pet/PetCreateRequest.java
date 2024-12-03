@@ -1,15 +1,13 @@
-package com.lp.central.models.dto;
+package com.lp.central.models.dto.pet;
 
 import java.util.List;
-
-import com.lp.central.models.PetModel;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class PetCreateRequest{
     @NotNull
-    private PetModel pet;
+    private PetCreate pet;
     @NotNull
     @Size(min = 11 , max = 11)
     private List<String> guardiansCpfs;
@@ -17,11 +15,11 @@ public class PetCreateRequest{
     public PetCreateRequest() {
     }
 
-    public PetModel getPet() {
+    public PetCreate getPet(PetCreate pet) {
         return pet;
     }
 
-    public void setPet(PetModel pet) {
+    public void setPet(PetCreate pet) {
         this.pet = pet;
     }
 
