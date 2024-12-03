@@ -15,10 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lp.users.models.dto.UserCreate;
 import com.lp.users.models.dto.UserGet;
+import com.lp.users.models.dto.UserGetAll;
 import com.lp.users.models.dto.UserUpdate;
 import com.lp.users.services.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+
+@Tag(name = "User Controller", description = "Controller responsável pelos usuários")
 @RestController
 @RequestMapping("/u")
 public class UserController {
@@ -38,6 +42,15 @@ public class UserController {
     public ResponseEntity<UserGet> get(@PathVariable Long id){
         try{
             return ResponseEntity.ok(userService.get(id));
+        }catch(Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UserGetAll> get(@PathVariable String email){
+        try{
+            return ResponseEntity.ok(userService.get(email));
         }catch(Exception e){
             return ResponseEntity.notFound().build();
         }

@@ -59,6 +59,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long create(UserCreate userCreate) {
+        if (userRepository.existsByEmail(userCreate.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
         UserModel user = new UserModel(userCreate.getName(), userCreate.getEmail(), userCreate.getCpf(), passwordEncoder.encode(userCreate.getPassword()), userCreate.getOccupation(), Role.USER);
         userRepository.save(user);
         return user.getId();

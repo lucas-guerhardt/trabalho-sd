@@ -1,6 +1,8 @@
 package com.lp.users.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,6 +55,11 @@ public class RabbitConfig {
     @Bean
     public Binding validationBinding(Queue validationQueue, DirectExchange validationExchange) {
         return BindingBuilder.bind(validationQueue).to(validationExchange).with(VALIDATION_ROUTING_KEY);
+    }
+
+    @Bean
+    public MessageConverter messageConverter() {
+        return new Jackson2JsonMessageConverter();
     }
 }
 

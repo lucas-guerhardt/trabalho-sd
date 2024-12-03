@@ -22,7 +22,7 @@ public class UserConsumerService {
 
     @RabbitListener(queues = RabbitConfig.EMAIL_QUEUE)
     public void receiveEmail(Map<String, String> message) {
-        System.out.println("Received message: " + message);
+        System.out.println("#################################################################### Received message: " + message);
 
         if(message.get("error") != null) {
             throw new RuntimeException("Error fetching password hash");
