@@ -6,10 +6,17 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import com.lp.central.config.ClinicConfig;
 import com.lp.central.models.GuardianModel;
 import com.lp.central.models.PetModel;
+import com.lp.central.models.dto.consultationService.ConsultationDto;
 import com.lp.central.models.dto.guardian.GuardianCreate;
 import com.lp.central.models.dto.guardian.GuardianGet;
 import com.lp.central.models.dto.guardian.GuardianUpdate;
@@ -21,6 +28,29 @@ public class GuardianServiceImpl implements GuardianService {
 
     @Autowired
     private GuardianRepository guardianRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    private ResponseEntity<List<ConsultationDto>> getConsultationIdByGuardianId(Long guardianId) {
+        ResponseEntity<List<ConsultationDto>> response = restTemplate.exchange(
+                ClinicConfig.GET_CONSULTATION_BY_GUARDIANID_URL + guardianId,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ConsultationDto>>() {
+                });
+
+        List<Long> consultationsIds = new ArrayList<>();
+        List<ConsultationDto> responseList = response.getBody();
+
+        if (responseList == null) {
+            return null;
+        }
+
+        responseList.forEach(consultation -> consultationsIds.add(consultation.getId()));
+
+        return response;
+    }
 
     @Override
     public List<Long> getPetsIdsOf(String cpf) {
@@ -95,6 +125,7 @@ public class GuardianServiceImpl implements GuardianService {
     }
 
     @Override
+    @Transactional
     public GuardianModel createGuardian(GuardianCreate guardian) {
         if (guardianRepository.existsByEmail(guardian.getEmail())
                 || guardianRepository.existsByCpf(guardian.getCpf())) {
@@ -105,6 +136,7 @@ public class GuardianServiceImpl implements GuardianService {
     }
 
     @Override
+    @Transactional
     public String addPet(Long guardianId, PetModel pet) {
         GuardianModel guardian = guardianRepository.findById(guardianId)
                 .orElseThrow(() -> new RuntimeException("Guardian not found"));
@@ -115,6 +147,7 @@ public class GuardianServiceImpl implements GuardianService {
     }
 
     @Override
+    @Transactional
     public String removePet(Long guardianId, PetModel pet) {
         GuardianModel guardian = guardianRepository.findById(guardianId)
                 .orElseThrow(() -> new RuntimeException("Guardian not found"));
@@ -125,6 +158,7 @@ public class GuardianServiceImpl implements GuardianService {
     }
 
     @Override
+    @Transactional
     public String updateGuardian(Long id, GuardianUpdate updatedGuardian) {
         GuardianModel guardian = guardianRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Guardian not found"));
@@ -149,9 +183,16 @@ public class GuardianServiceImpl implements GuardianService {
     }
 
     @Override
+    @Transactional
     public void deleteGuardian(Long id) {
         if (!guardianRepository.existsById(id)) {
             throw new RuntimeException("Guardian not found");
+        }
+        List<ConsultationDto> consultations = getConsultationIdByGuardianId(id).getBody();
+        if (consultations != null) {
+            consultations.forEach(consultation -> {
+                restTemplate.delete(ClinicConfig.DELETE_CONSULTATION_URL + consultation.getId());
+            });
         }
         guardianRepository.deleteById(id);
     }

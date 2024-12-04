@@ -6,10 +6,17 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import com.lp.central.config.ClinicConfig;
 import com.lp.central.models.GuardianModel;
 import com.lp.central.models.PetModel;
+import com.lp.central.models.dto.consultationService.ConsultationDto;
 import com.lp.central.models.dto.guardian.GuardianGet;
 import com.lp.central.models.dto.pet.PetCreate;
 import com.lp.central.models.dto.pet.PetGet;
@@ -25,6 +32,29 @@ public class PetServiceImpl implements PetService {
 
     @Autowired
     private GuardianService guardianService;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    private ResponseEntity<List<ConsultationDto>> getConsultationIdByPetId(Long petId) {
+        ResponseEntity<List<ConsultationDto>> response = restTemplate.exchange(
+                ClinicConfig.GET_CONSULTATION_BY_PETID_URL + petId,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ConsultationDto>>() {
+                });
+
+        List<Long> consultationsIds = new ArrayList<>();
+        List<ConsultationDto> responseList = response.getBody();
+
+        if (responseList == null) {
+            return null;
+        }
+
+        responseList.forEach(consultation -> consultationsIds.add(consultation.getId()));
+
+        return response;
+    }
 
     @Override
     public List<String> getGuardiansCpfsOf(Long petId) {
@@ -82,6 +112,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    @Transactional
     public PetModel createPet(PetCreate pet, List<String> guardianCpfs) {
         PetModel newPet = new PetModel(pet.getName(), pet.getAge(), pet.getColor(), pet.getBreed(), pet.getPetType());
         petRepository.save(newPet);
@@ -101,6 +132,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    @Transactional
     public String updatePet(Long id, PetUpdate updatedPet) {
         PetModel pet = petRepository.findById(id).orElse(null);
         if (pet == null) {
@@ -125,6 +157,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    @Transactional
     public String addGuardians(Long id, List<String> guardianCpfs) {
         PetModel pet = petRepository.findById(id).orElse(null);
         if (pet == null) {
@@ -144,6 +177,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    @Transactional
     public String removeGuardians(Long id, List<String> guardianCpfs) {
         PetModel pet = petRepository.findById(id).orElse(null);
         if (pet == null) {
@@ -159,10 +193,19 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    @Transactional
     public void deletePet(Long id) {
         if (!petRepository.existsById(id)) {
             throw new RuntimeException("Pet not found");
         }
+
+        List<ConsultationDto> consultations = getConsultationIdByPetId(id).getBody();
+        if (consultations != null) {
+            consultations.forEach(consultation -> {
+                restTemplate.delete(ClinicConfig.DELETE_CONSULTATION_URL + consultation.getId());
+            });
+        }
+
         petRepository.deleteById(id);
     }
 }
