@@ -1,6 +1,8 @@
 package com.lp.clinic.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +18,11 @@ public class RabbitConfig {
     public static final String RESPONSE_QUEUE = "response.queue";
     public static final String RESONSE_EXCHANGE = "response.exchange";
     public static final String RESPONSE_ROUTING_KEY = "response.routing.key";
+
+    @Bean
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+        return new RabbitAdmin(connectionFactory);
+    }
 
     @Bean
     @Qualifier(EMAIL_QUEUE)
