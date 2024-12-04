@@ -16,6 +16,7 @@ public class EmailProducerServiceImpl implements EmailProducerService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+    @Override
     public void sendEmail(String to, String subject, String text) {
         EmailDto email = new EmailDto(to, subject, text);
         rabbitTemplate.convertAndSend(RabbitConfig.EMAIL_EXCHANGE, RabbitConfig.EMAIL_ROUTING_KEY, email);

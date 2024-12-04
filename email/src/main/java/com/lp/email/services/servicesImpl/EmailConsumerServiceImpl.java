@@ -21,6 +21,7 @@ public class EmailConsumerServiceImpl implements EmailConsumerService {
     @Autowired
     private ResponseProducerServiceImpl responseProducerService;
 
+    @Override
     @RabbitListener(queues = RabbitConfig.EMAIL_QUEUE)
     public void receiveEmail(EmailDto message) {
         System.out.println("Received message: " + message);

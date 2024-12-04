@@ -9,6 +9,8 @@ import com.lp.clinic.models.dto.EmailService.ResponseDto;
 import com.lp.clinic.services.ResponseConsumerService;
 
 public class ResponseConsumerServiceImpl implements ResponseConsumerService {
+
+    @Override
     @RabbitListener(queues = RabbitConfig.RESPONSE_QUEUE)
     public void consumeResponse(ResponseDto response) {
         if (Objects.isNull(response.getError())) {
