@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/pet")
-@Tag(name = "Pet", description = "Pet API")
+@Tag(name = "Pet Controller", description = "Pet API")
 public class PetController {
     @Autowired
     private PetService petService;

@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/guardian")
-@Tag(name = "Guardian", description = "Guardian API")
+@Tag(name = "Guardian Controller", description = "Guardian API")
 public class GuardianController {
     @Autowired
     private GuardianService guardianService;

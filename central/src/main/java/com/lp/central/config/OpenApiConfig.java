@@ -6,8 +6,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "API de Usuários", version = "v1"), tags = {
-                @Tag(name = "User Controller", description = "Endpoints relacionados aos usuários")
+@OpenAPIDefinition(info = @Info(title = "API Central", version = "v1"), tags = {
+        @Tag(name = "Guardian Controller", description = "Endpoints relacionados aos Guardiões"),
+        @Tag(name = "Pet Controller", description = "Endpoints relacionados aos Pets")
 })
 public class OpenApiConfig {
 }
