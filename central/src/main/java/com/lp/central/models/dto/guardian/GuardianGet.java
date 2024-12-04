@@ -33,4 +33,10 @@ public class GuardianGet extends GuardianModel {
         this.petsIds = petsIds;
     }
 
+    public GuardianModel toGuardianModel() {
+        GuardianModel guardianModel = new GuardianModel(this.getName(), this.getEmail(), this.getCpf());
+        guardianModel.setId(this.id);
+        return guardianModel;
+    }
+
 }

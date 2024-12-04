@@ -63,18 +63,41 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public String createPet(PetCreate pet, List<String> guardianCpfs) {
+    public List<PetGet> getPetsByGuardianId(Long id) {
+        GuardianModel guardian = guardianService.get(id);
+        if (Objects.equals(guardian, null)) {
+            throw new RuntimeException("Guardian not found");
+
+        }
+        List<PetModel> pets = new ArrayList<>();
+        pets.addAll(guardian.getPets());
+
+        List<PetGet> petGet = new ArrayList<>();
+        for (PetModel pet : pets) {
+            petGet.add(new PetGet(pet.getId(), pet.getName(), pet.getAge(), pet.getColor(), pet.getBreed(),
+                    pet.getPetType(), getGuardiansCpfsOf(id)));
+        }
+
+        return petGet;
+    }
+
+    @Override
+    public PetModel createPet(PetCreate pet, List<String> guardianCpfs) {
         PetModel newPet = new PetModel(pet.getName(), pet.getAge(), pet.getColor(), pet.getBreed(), pet.getPetType());
         petRepository.save(newPet);
 
         List<GuardianGet> guardians = guardianService.getByCpf(guardianCpfs);
-        newPet.setGuardians(new HashSet<>(guardians));
+        List<GuardianModel> guardiansModels = new ArrayList<>();
+        for (GuardianGet guardian : guardians) {
+            guardiansModels.add(guardian.toGuardianModel());
+        }
+        newPet.setGuardians(new HashSet<>(guardiansModels));
 
         for (GuardianGet guardian : guardians) {
-            guardian.getPets().add(newPet);
             guardianService.addPet(guardian.getId(), newPet);
         }
-        return "Pet created successfully with id: " + newPet.getId();
+
+        return newPet;
     }
 
     @Override
@@ -110,8 +133,9 @@ public class PetServiceImpl implements PetService {
 
         List<GuardianModel> guardians = new ArrayList<>();
         guardians.addAll(pet.getGuardians());
-        guardians.addAll(guardianService.getByCpf(guardianCpfs));
-
+        List<GuardianGet> guardiansGet = guardianService.getByCpf(guardianCpfs);
+        guardiansGet.forEach(guardian -> guardians.add(guardian.toGuardianModel()));
+        guardians.addAll(guardians);
         pet.setGuardians(new HashSet<>(guardians));
         guardians.forEach(guardian -> guardianService.addPet(guardian.getId(), pet));
         petRepository.save(pet);

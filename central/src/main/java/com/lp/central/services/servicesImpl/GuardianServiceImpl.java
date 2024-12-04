@@ -13,19 +13,14 @@ import com.lp.central.models.PetModel;
 import com.lp.central.models.dto.guardian.GuardianCreate;
 import com.lp.central.models.dto.guardian.GuardianGet;
 import com.lp.central.models.dto.guardian.GuardianUpdate;
-import com.lp.central.models.dto.pet.PetGet;
 import com.lp.central.repositories.GuardianRepository;
 import com.lp.central.services.GuardianService;
-import com.lp.central.services.PetService;
 
 @Service
-public class GuardianServicesImpl implements GuardianService {
+public class GuardianServiceImpl implements GuardianService {
 
     @Autowired
     private GuardianRepository guardianRepository;
-
-    @Autowired
-    private PetService petService;
 
     @Override
     public List<Long> getPetsIdsOf(String cpf) {
@@ -100,31 +95,13 @@ public class GuardianServicesImpl implements GuardianService {
     }
 
     @Override
-    public List<PetGet> getPetsByGuardian(Long id) {
-        GuardianModel guardian = guardianRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Guardian not found"));
-        List<PetModel> pets = new ArrayList<>();
-        pets.addAll(guardian.getPets());
-
-        List<PetGet> petGet = new ArrayList<>();
-        for (PetModel pet : pets) {
-            petGet.add(new PetGet(pet.getId(), pet.getName(), pet.getAge(), pet.getColor(), pet.getBreed(),
-                    pet.getPetType(), petService.getGuardiansCpfsOf(id)));
-        }
-
-        return petGet;
-    }
-
-    @Override
-    public String createGuardian(GuardianCreate guardian) {
+    public GuardianModel createGuardian(GuardianCreate guardian) {
         if (guardianRepository.existsByEmail(guardian.getEmail())
                 || guardianRepository.existsByCpf(guardian.getCpf())) {
             throw new RuntimeException("Error creating guardian");
         }
         GuardianModel newGuardian = new GuardianModel(guardian.getName(), guardian.getEmail(), guardian.getCpf());
-        guardianRepository.save(newGuardian);
-
-        return "Guardian created with id: " + newGuardian.getId();
+        return guardianRepository.save(newGuardian);
     }
 
     @Override

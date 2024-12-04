@@ -16,72 +16,83 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lp.central.models.GuardianModel;
-import com.lp.central.models.PetModel;
+import com.lp.central.models.dto.guardian.GuardianCreate;
+import com.lp.central.models.dto.guardian.GuardianGet;
+import com.lp.central.models.dto.guardian.GuardianUpdate;
+import com.lp.central.models.dto.pet.PetGet;
 import com.lp.central.services.GuardianService;
+import com.lp.central.services.PetService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/guardian")
+@Tag(name = "Guardian", description = "Guardian API")
 public class GuardianController {
     @Autowired
     private GuardianService guardianService;
 
+    @Autowired
+    private PetService petService;
+
     @GetMapping("/")
-    public ResponseEntity<List<GuardianModel>> getAllGuardians() {
-        try{
-            return ResponseEntity.ok(guardianService.getAllGuardians());
-        }catch (Exception e){
+    public ResponseEntity<List<GuardianGet>> get() {
+        try {
+            return ResponseEntity.ok(guardianService.get());
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GuardianModel> getGuardianById(@PathVariable Long id) {
-        try{
-            return ResponseEntity.ok(guardianService.getGuardianById(id));
-        }catch (Exception e){
+    public ResponseEntity<GuardianGet> get(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(guardianService.get(id));
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/{id}/pets")
-    public ResponseEntity<List<PetModel>> getPetsByGuardian(@PathVariable Long id) {
-        try{
-            return ResponseEntity.ok(guardianService.getPetsByGuardian(id));
-        }catch (Exception e){
+    public ResponseEntity<List<PetGet>> getPetsByGuardian(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(petService.getPetsByGuardianId(id));
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createGuardian(@RequestBody GuardianModel guardian) {
-        try{
+    public ResponseEntity<String> createGuardian(@RequestBody GuardianCreate guardian) {
+        try {
             GuardianModel createdGuardian = guardianService.createGuardian(guardian);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(createdGuardian.getId())
-            .toUri();
+                    .path("/{id}")
+                    .buildAndExpand(createdGuardian.getId())
+                    .toUri();
             return ResponseEntity.created(location).body("Guardian created with id: " + createdGuardian.getId());
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<GuardianModel> updateGuardian(@PathVariable Long id, @RequestBody GuardianModel updatedGuardian) {
-        try{
+    public ResponseEntity<String> updateGuardian(@PathVariable Long id,
+            @RequestBody GuardianUpdate updatedGuardian) {
+        try {
             guardianService.updateGuardian(id, updatedGuardian);
             return ResponseEntity.noContent().build();
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteGuardian(@PathVariable Long id) {
-        try{
+        try {
             guardianService.deleteGuardian(id);
             return ResponseEntity.noContent().build();
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }

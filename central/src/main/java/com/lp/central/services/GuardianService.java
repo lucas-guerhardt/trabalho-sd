@@ -2,11 +2,11 @@ package com.lp.central.services;
 
 import java.util.List;
 
+import com.lp.central.models.GuardianModel;
 import com.lp.central.models.PetModel;
 import com.lp.central.models.dto.guardian.GuardianCreate;
 import com.lp.central.models.dto.guardian.GuardianGet;
 import com.lp.central.models.dto.guardian.GuardianUpdate;
-import com.lp.central.models.dto.pet.PetGet;
 
 public interface GuardianService {
     List<GuardianGet> get();
@@ -21,9 +21,7 @@ public interface GuardianService {
 
     List<GuardianGet> getByCpf(List<String> cpf);
 
-    List<PetGet> getPetsByGuardian(Long id);
-
-    String createGuardian(GuardianCreate guardian);
+    GuardianModel createGuardian(GuardianCreate guardian);
 
     String addPet(Long guardianId, PetModel pet);
 

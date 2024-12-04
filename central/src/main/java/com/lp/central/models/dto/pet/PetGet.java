@@ -36,4 +36,11 @@ public class PetGet extends PetModel {
     public void setGuardiansCpfs(List<String> guardiansCpfs) {
         this.guardiansCpfs = guardiansCpfs;
     }
+
+    public PetModel toPetModel() {
+        PetModel petModel = new PetModel(this.getName(), this.getAge(), this.getColor(), this.getBreed(),
+                this.getPetType());
+        petModel.setId(this.id);
+        return petModel;
+    }
 }

@@ -2,6 +2,7 @@ package com.lp.central.services;
 
 import java.util.List;
 
+import com.lp.central.models.PetModel;
 import com.lp.central.models.dto.pet.PetCreate;
 import com.lp.central.models.dto.pet.PetGet;
 import com.lp.central.models.dto.pet.PetUpdate;
@@ -15,7 +16,9 @@ public interface PetService {
 
     PetGet getByGuardianCpf(String cpf);
 
-    String createPet(PetCreate pet, List<String> guardianCpfs);
+    List<PetGet> getPetsByGuardianId(Long id);
+
+    PetModel createPet(PetCreate pet, List<String> guardianCpfs);
 
     String updatePet(Long id, PetUpdate updatedPet);
 

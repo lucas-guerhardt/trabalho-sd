@@ -5,17 +5,17 @@ import java.util.List;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class PetCreateRequest{
+public class PetCreateRequest {
     @NotNull
     private PetCreate pet;
     @NotNull
-    @Size(min = 11 , max = 11)
+    @Size(min = 11, max = 11)
     private List<String> guardiansCpfs;
 
     public PetCreateRequest() {
     }
 
-    public PetCreate getPet(PetCreate pet) {
+    public PetCreate getPet() {
         return pet;
     }
 
