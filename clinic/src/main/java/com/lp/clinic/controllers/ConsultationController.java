@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lp.clinic.models.ConsultationModel;
-import com.lp.clinic.models.dto.ConsultationCreate;
-import com.lp.clinic.models.dto.ConsultationGet;
-import com.lp.clinic.models.dto.ConsultationUpdate;
+import com.lp.clinic.models.dto.CRUD.ConsultationCreate;
+import com.lp.clinic.models.dto.CRUD.ConsultationGet;
+import com.lp.clinic.models.dto.CRUD.ConsultationUpdate;
 import com.lp.clinic.services.ConsultationService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;

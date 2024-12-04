@@ -1,4 +1,4 @@
-package com.lp.clinic.models.dto;
+package com.lp.clinic.models.dto.CRUD;
 
 import java.util.List;
 import java.util.Set;

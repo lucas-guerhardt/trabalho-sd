@@ -11,11 +11,11 @@ import org.springframework.web.client.RestTemplate;
 
 import com.lp.clinic.config.CentralConfig;
 import com.lp.clinic.models.ConsultationModel;
-import com.lp.clinic.models.dto.ConsultationCreate;
-import com.lp.clinic.models.dto.ConsultationGet;
-import com.lp.clinic.models.dto.ConsultationUpdate;
-import com.lp.clinic.models.dto.GuardianDto;
-import com.lp.clinic.models.dto.PetDto;
+import com.lp.clinic.models.dto.CRUD.ConsultationCreate;
+import com.lp.clinic.models.dto.CRUD.ConsultationGet;
+import com.lp.clinic.models.dto.CRUD.ConsultationUpdate;
+import com.lp.clinic.models.dto.CentralService.GuardianDto;
+import com.lp.clinic.models.dto.CentralService.PetDto;
 import com.lp.clinic.repositories.ConsultationRepository;
 import com.lp.clinic.services.ConsultationService;
 

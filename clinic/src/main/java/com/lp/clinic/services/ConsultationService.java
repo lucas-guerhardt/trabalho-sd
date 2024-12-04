@@ -3,9 +3,9 @@ package com.lp.clinic.services;
 import java.util.List;
 
 import com.lp.clinic.models.ConsultationModel;
-import com.lp.clinic.models.dto.ConsultationCreate;
-import com.lp.clinic.models.dto.ConsultationGet;
-import com.lp.clinic.models.dto.ConsultationUpdate;
+import com.lp.clinic.models.dto.CRUD.ConsultationCreate;
+import com.lp.clinic.models.dto.CRUD.ConsultationGet;
+import com.lp.clinic.models.dto.CRUD.ConsultationUpdate;
 
 public interface ConsultationService {
     List<ConsultationGet> get();

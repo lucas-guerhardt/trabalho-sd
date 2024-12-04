@@ -1,4 +1,4 @@
-package com.lp.clinic.models.dto;
+package com.lp.clinic.models.dto.CentralService;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.lp.clinic.models.dto;
+package com.lp.clinic.models.dto.CRUD;
 
 public class ConsultationDelete {
     private Long id;
