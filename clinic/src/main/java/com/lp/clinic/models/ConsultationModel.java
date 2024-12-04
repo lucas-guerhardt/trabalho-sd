@@ -28,29 +28,26 @@ public class ConsultationModel {
     private Long patientId;
 
     @ElementCollection
-    @CollectionTable(
-        name = "consultation_guardians", 
-        joinColumns = @JoinColumn(name = "consultation_id")
-    )
+    @CollectionTable(name = "consultation_guardians", joinColumns = @JoinColumn(name = "consultation_id"))
     @Column(name = "guardian_id")
     private Set<Long> guardiansIds;
 
     @ElementCollection
-    @CollectionTable(
-        name = "consultation_symptoms", 
-        joinColumns = @JoinColumn(name = "consultation_id") 
-    )
-    @Enumerated(EnumType.ORDINAL) 
+    @CollectionTable(name = "consultation_symptoms", joinColumns = @JoinColumn(name = "consultation_id"))
+    @Enumerated(EnumType.STRING)
     @Column(name = "symptom")
     private Set<Symptoms> symptoms;
+
+    private String description;
 
     public ConsultationModel() {
     }
 
-    public ConsultationModel(Long patientId, Set<Long> guardiansIds, Set<Symptoms> symptomsIds) {
+    public ConsultationModel(Long patientId, Set<Long> guardiansIds, Set<Symptoms> symptoms, String description) {
         this.patientId = patientId;
         this.guardiansIds = guardiansIds;
-        this.symptoms = symptomsIds;
+        this.symptoms = symptoms;
+        this.description = description;
     }
 
     public Long getId() {
@@ -83,5 +80,13 @@ public class ConsultationModel {
 
     public void setSymptoms(Set<Symptoms> symptoms) {
         this.symptoms = symptoms;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
