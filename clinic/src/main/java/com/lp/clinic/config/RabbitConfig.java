@@ -1,22 +1,25 @@
 package com.lp.clinic.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@EnableRabbit
 public class RabbitConfig {
+
     public static final String EMAIL_QUEUE = "email.queue";
     public static final String EMAIL_EXCHANGE = "email.exchange";
     public static final String EMAIL_ROUTING_KEY = "email.routing.key";
 
     public static final String RESPONSE_QUEUE = "response.queue";
-    public static final String RESONSE_EXCHANGE = "response.exchange";
+    public static final String RESPONSE_EXCHANGE = "response.exchange";
     public static final String RESPONSE_ROUTING_KEY = "response.routing.key";
 
     @Bean
@@ -25,35 +28,25 @@ public class RabbitConfig {
     }
 
     @Bean
-    @Qualifier(EMAIL_QUEUE)
-    public Queue emailQueue() {
-        return new Queue(EMAIL_QUEUE, true);
-    }
+    public ApplicationRunner initializeRabbit(RabbitAdmin rabbitAdmin) {
+        return _ -> {
 
-    @Bean
-    public DirectExchange emailExchange() {
-        return new DirectExchange(EMAIL_EXCHANGE);
-    }
+            rabbitAdmin.declareQueue(new Queue(EMAIL_QUEUE, true));
+            rabbitAdmin.declareQueue(new Queue(RESPONSE_QUEUE, true));
 
-    @Bean
-    public Binding emailBinding(@Qualifier(EMAIL_QUEUE) Queue emailQueue, DirectExchange emailExchange) {
-        return BindingBuilder.bind(emailQueue).to(emailExchange).with(EMAIL_ROUTING_KEY);
-    }
+            rabbitAdmin.declareExchange(new DirectExchange(EMAIL_EXCHANGE));
+            rabbitAdmin.declareExchange(new DirectExchange(RESPONSE_EXCHANGE));
 
-    @Bean
-    @Qualifier(RESPONSE_QUEUE)
-    public Queue responseQueue() {
-        return new Queue(RESPONSE_QUEUE, true);
-    }
+            rabbitAdmin.declareBinding(
+                    BindingBuilder.bind(new Queue(EMAIL_QUEUE, true))
+                            .to(new DirectExchange(EMAIL_EXCHANGE))
+                            .with(EMAIL_ROUTING_KEY));
 
-    @Bean
-    public DirectExchange responseExchange() {
-        return new DirectExchange(RESONSE_EXCHANGE);
-    }
-
-    @Bean
-    public Binding responseBinding(@Qualifier(RESPONSE_QUEUE) Queue responseQueue, DirectExchange responseExchange) {
-        return BindingBuilder.bind(responseQueue).to(responseExchange).with(RESPONSE_ROUTING_KEY);
+            rabbitAdmin.declareBinding(
+                    BindingBuilder.bind(new Queue(RESPONSE_QUEUE, true))
+                            .to(new DirectExchange(RESPONSE_EXCHANGE))
+                            .with(RESPONSE_ROUTING_KEY));
+        };
     }
 
     @Bean
