@@ -1,7 +1,6 @@
 package com.lp.clinic.config;
 
 import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableRabbit
 public class RabbitConfig {
 
     public static final String EMAIL_QUEUE = "email.queue";
@@ -30,7 +28,6 @@ public class RabbitConfig {
     @Bean
     public ApplicationRunner initializeRabbit(RabbitAdmin rabbitAdmin) {
         return _ -> {
-
             rabbitAdmin.declareQueue(new Queue(EMAIL_QUEUE, true));
             rabbitAdmin.declareQueue(new Queue(RESPONSE_QUEUE, true));
 
