@@ -4,5 +4,5 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class config {
-    public static final Boolean MOCK_EMAIL = false;
+    public static final Boolean MOCK_EMAIL = true;
 }
